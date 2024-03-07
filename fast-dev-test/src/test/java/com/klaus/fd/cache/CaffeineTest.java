@@ -1,7 +1,7 @@
 package com.klaus.fd.cache;
 
 import com.alibaba.fastjson2.JSON;
-import com.klaus.fd.comm.TestEntity;
+import com.klaus.fd.comm.TestEntityA;
 import com.klaus.fd.util.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -38,11 +38,11 @@ public class CaffeineTest {
     void testC() {
         String key = "testC";
 
-        TestEntity testEntity = new TestEntity();
-        testEntity.setId(123L);
-        testEntity.setName("Name.......");
-        cacheUtil.add(key, testEntity);
+        TestEntityA testEntityA = new TestEntityA();
+        testEntityA.setId(123L);
+        testEntityA.setName("Name.......");
+        cacheUtil.add(key, testEntityA);
 
-        log.info("{}", JSON.toJSONString(cacheUtil.get(key, TestEntity.class)));
+        log.info("{}", JSON.toJSONString(cacheUtil.get(key, TestEntityA.class)));
     }
 }

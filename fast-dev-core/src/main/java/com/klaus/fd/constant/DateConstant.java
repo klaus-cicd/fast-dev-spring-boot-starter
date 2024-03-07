@@ -34,5 +34,7 @@ public class DateConstant {
     public static final String PATTERN_TIME = "yyyy-MM-dd HH:mm:ss";
     public static final String PATTERN_DATE = "yyyy-MM-dd";
     public static final ZoneId ZONE_ID_UTC = ZoneOffset.UTC;
-    public static final ZoneId ZONE_ID_SHANGHAI = ZoneId.of("Asia/Shanghai");
+    public static final String TIMEZONE = "Asia/Shanghai";
+    public static final ZoneId ZONE_ID_SHANGHAI = ZoneId.of(TIMEZONE);
+    public static final ZoneOffset ZONE_OFFSET_SHANGHAI = ZoneOffset.of("+08:00");
 }

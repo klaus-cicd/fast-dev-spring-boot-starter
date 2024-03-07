@@ -14,6 +14,7 @@
         <module>fast-dev-test</module>
         <module>fast-dev-web</module>
         <module>fast-dev-db</module>
+        <module>fast-dev-mq</module>
     </modules>
 
     <properties>
@@ -36,6 +37,8 @@
         <mysql-connector.version>8.0.33</mysql-connector.version>
         <mybatis-plus-boot-starter.vesion>3.5.1</mybatis-plus-boot-starter.vesion>
         <druid.version>1.2.21</druid.version>
+
+        <rocketmq-spring-boot-starter.version>2.2.3</rocketmq-spring-boot-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -56,6 +59,11 @@
             <dependency>
                 <groupId>com.klaus.fd</groupId>
                 <artifactId>fast-dev-cache</artifactId>
+                <version>${fd.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.klaus.fd</groupId>
+                <artifactId>fast-dev-web</artifactId>
                 <version>${fd.version}</version>
             </dependency>
             <dependency>
@@ -133,6 +141,11 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq-spring-boot-starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

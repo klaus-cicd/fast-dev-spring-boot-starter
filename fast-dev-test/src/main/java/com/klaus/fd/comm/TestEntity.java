@@ -1,26 +1,24 @@
 package com.klaus.fd.comm;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+/**
+ * @author Silas
+ */
+@Data
+@NoArgsConstructor
 public class TestEntity {
 
+    private String username;
 
-    private Long id;
+    private LocalDate localDate;
 
+    private LocalDateTime localDateTime;
 
-    private String name;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private Timestamp timestamp;
 }

@@ -21,6 +21,7 @@ public class BeanUtil extends BeanUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     public static <T> T getBean(Class<T> targetClass) {
+        checkApplicationContext();
         return applicationContext.getBean(targetClass);
     }
 
@@ -56,7 +57,7 @@ public class BeanUtil extends BeanUtils implements ApplicationContextAware {
 
     private static void checkApplicationContext() {
         if (applicationContext == null) {
-            throw new IllegalStateException("BeanUtil.applicationContext未注入");
+            throw new IllegalStateException("BeanUtil.applicationContext registration failed");
         }
     }
 }
