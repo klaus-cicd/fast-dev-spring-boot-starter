@@ -15,6 +15,7 @@
         <module>fast-dev-web</module>
         <module>fast-dev-db</module>
         <module>fast-dev-mq</module>
+        <module>fast-dev-dds</module>
     </modules>
 
     <properties>
@@ -35,10 +36,13 @@
         <lombok.version>1.18.16</lombok.version>
 
         <mysql-connector.version>8.0.33</mysql-connector.version>
-        <mybatis-plus-boot-starter.vesion>3.5.1</mybatis-plus-boot-starter.vesion>
+        <mybatis-plus-boot-starter.vesion>3.5.2</mybatis-plus-boot-starter.vesion>
+        <dynamic-datasource-spring-boot-starter.version>3.5.2</dynamic-datasource-spring-boot-starter.version>
         <druid.version>1.2.21</druid.version>
 
         <rocketmq-spring-boot-starter.version>2.2.3</rocketmq-spring-boot-starter.version>
+
+        <redisson.version>3.17.0</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -54,6 +58,11 @@
             <dependency>
                 <groupId>com.klaus.fd</groupId>
                 <artifactId>fast-dev-core</artifactId>
+                <version>${fd.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.klaus.fd</groupId>
+                <artifactId>fast-dev-db</artifactId>
                 <version>${fd.version}</version>
             </dependency>
             <dependency>
@@ -96,6 +105,12 @@
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
+            <!-- Redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
@@ -135,6 +150,11 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus-boot-starter.vesion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic-datasource-spring-boot-starter.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
             <dependency>
