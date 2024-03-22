@@ -4,7 +4,7 @@ package com.klaus.fd.util;
 import com.klaus.fd.constant.SqlConstant;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class SQLBuilder {
 

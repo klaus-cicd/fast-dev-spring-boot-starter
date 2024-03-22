@@ -1,7 +1,7 @@
 package com.klaus.fd.constant;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class SqlConstant {
 

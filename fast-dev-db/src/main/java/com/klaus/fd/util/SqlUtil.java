@@ -20,7 +20,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class SqlUtil {
 
