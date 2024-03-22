@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PageResult<T> extends BaseResult<T> {
+public class PageResult<T> extends BaseResult {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,6 @@ public class PageResult<T> extends BaseResult<T> {
     private long current;
 
     public PageResult(List<T> records) {
-        super();
         this.records = records;
     }
 
