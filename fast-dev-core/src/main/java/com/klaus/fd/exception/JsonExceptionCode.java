@@ -1,7 +1,7 @@
 package com.klaus.fd.exception;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public enum JsonExceptionCode implements ExceptionCode {
 

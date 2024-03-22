@@ -3,7 +3,6 @@ package com.klaus.fd;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.klaus.fd.json.*;
-import com.klaus.fd.utils.BeanUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
@@ -12,15 +11,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class CoreAutoConfiguration {
-
-
-    @Bean
-    public BeanUtil beanUtil() {
-        return new BeanUtil();
-    }
 
     @Bean
     @Primary

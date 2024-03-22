@@ -13,15 +13,15 @@ import java.time.format.DateTimeFormatter;
  * @date 2024/01/02
  */
 public class DateUtil {
-    public static final ZoneId DEFAULT_ZONE_ID = DateConstant.ZONE_ID_SHANGHAI;
+    public static final ZoneId DEFAULT_ZONE_ID = DateConstant.ZONE_ID_UTC;
     public static final ZoneOffset DEFAULT_ZONE_OFFSET = DateConstant.ZONE_OFFSET_SHANGHAI;
 
     public static LocalDateTime now() {
         return LocalDateTime.now(DEFAULT_ZONE_ID);
     }
 
-    public static LocalDateTime nowUtc() {
-        return LocalDateTime.now(ZoneOffset.UTC);
+    public static LocalDateTime now(ZoneId zone) {
+        return LocalDateTime.now(zone);
     }
 
 
@@ -30,7 +30,7 @@ public class DateUtil {
     }
 
     public static long nowUtcTs() {
-        return nowUtc().toInstant(ZoneOffset.UTC).toEpochMilli();
+        return now().toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 
     public static long toLong(Timestamp timestamp) {
@@ -68,5 +68,18 @@ public class DateUtil {
 
     public static Timestamp parseToTimestamp(long longValue) {
         return new Timestamp(longValue);
+    }
+
+    public static String toUtcRfc3339(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(DateConstant.UTC_RFC3339_FORMAT).withZone(ZoneOffset.UTC));
+    }
+
+    public static String toShanghaiRfc3339(LocalDateTime localDateTime) {
+        return localDateTime.format(DateConstant.DTF_SHANGHAI);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(toUtcRfc3339(DateUtil.now()));
+        System.out.println(toShanghaiRfc3339(DateUtil.now(DateConstant.ZONE_ID_SHANGHAI)));
     }
 }

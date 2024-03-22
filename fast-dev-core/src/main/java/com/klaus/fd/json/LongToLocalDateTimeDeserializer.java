@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * 自定义反序列化器: 毫秒级时间戳解析为UTC的LocalDateTime对象
  *
- * @author silas
+ * @author Klaus
  */
 public class LongToLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
     @Override

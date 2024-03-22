@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class TimestampToLongSerializer extends JsonSerializer<Timestamp> {
     @Override

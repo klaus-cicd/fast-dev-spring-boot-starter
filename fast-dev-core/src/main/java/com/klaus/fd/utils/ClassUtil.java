@@ -1,4 +1,4 @@
-package com.klaus.fd.util;
+package com.klaus.fd.utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -1,12 +1,12 @@
 package com.klaus.fd.exception;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class JsonException extends AbstractException {
 
-    public JsonException(String message, Integer code) {
-        super(message, code);
+    public JsonException(Integer code, String message) {
+        super(code, message);
     }
 
     public JsonException(ExceptionCode exceptionCode) {

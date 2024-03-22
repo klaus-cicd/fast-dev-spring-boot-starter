@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.Nullable;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -22,7 +23,11 @@ public class BeanUtil extends BeanUtils implements ApplicationContextAware {
 
     public static <T> T getBean(Class<T> targetClass) {
         checkApplicationContext();
-        return applicationContext.getBean(targetClass);
+        try {
+            return applicationContext.getBean(targetClass);
+        } catch (BeansException e) {
+            return null;
+        }
     }
 
 
@@ -36,7 +41,11 @@ public class BeanUtil extends BeanUtils implements ApplicationContextAware {
      */
     public static <T> Map<String, T> getBeans(Class<T> clazz) {
         checkApplicationContext();
-        return applicationContext.getBeansOfType(clazz);
+        try {
+            return applicationContext.getBeansOfType(clazz);
+        } catch (BeansException e) {
+            return Collections.emptyMap();
+        }
     }
 
     /**
@@ -45,7 +54,11 @@ public class BeanUtil extends BeanUtils implements ApplicationContextAware {
     @SuppressWarnings("unchecked")
     public static <T> T getBean(String name) {
         checkApplicationContext();
-        return (T) applicationContext.getBean(name);
+        try {
+            return (T) applicationContext.getBean(name);
+        } catch (BeansException e) {
+            return null;
+        }
     }
 
     @Override

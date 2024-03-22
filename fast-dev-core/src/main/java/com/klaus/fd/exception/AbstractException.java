@@ -11,7 +11,7 @@ public class AbstractException extends RuntimeException {
 
     private Integer code;
 
-    public AbstractException(String message, Integer code) {
+    public AbstractException(Integer code, String message) {
         super(message);
         this.code = code;
     }

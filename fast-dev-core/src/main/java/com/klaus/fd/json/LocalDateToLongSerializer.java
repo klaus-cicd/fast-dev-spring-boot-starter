@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 
 /**
- * @author Silas
+ * @author Klaus
  */
 public class LocalDateToLongSerializer extends JsonSerializer<LocalDate> {
 

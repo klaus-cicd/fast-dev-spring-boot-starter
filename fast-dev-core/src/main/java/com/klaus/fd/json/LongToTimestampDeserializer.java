@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 /**
  * 自定义反序列化器: 毫秒级时间戳解析为Timestamp对象
  *
- * @author silas
+ * @author Klaus
  */
 public class LongToTimestampDeserializer extends JsonDeserializer<Timestamp> {
     @Override
