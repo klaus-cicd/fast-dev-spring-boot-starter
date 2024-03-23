@@ -16,6 +16,7 @@
         <module>fast-dev-db</module>
         <module>fast-dev-mq</module>
         <module>fast-dev-dds</module>
+        <module>fast-dev-auth</module>
     </modules>
 
     <properties>

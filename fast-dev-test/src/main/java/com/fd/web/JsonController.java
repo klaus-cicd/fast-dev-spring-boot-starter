@@ -1,7 +1,7 @@
-package com.klaus.fd.web;
+package com.fd.web;
 
+import com.fd.web.response.Result;
 import com.klaus.fd.comm.TestEntity;
-import com.klaus.fd.response.Result;
 import com.klaus.fd.utils.JsonUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

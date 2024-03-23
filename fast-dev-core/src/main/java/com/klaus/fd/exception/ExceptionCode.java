@@ -21,4 +21,5 @@ public interface ExceptionCode {
      * @return {@link String}
      */
     String getMsg();
+
 }

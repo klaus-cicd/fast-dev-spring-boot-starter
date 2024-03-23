@@ -1,4 +1,4 @@
-package com.klaus.fd.response;
+package com.fd.web.response;
 
 import com.klaus.fd.exception.ExceptionCode;
 import lombok.Builder;
@@ -56,7 +56,16 @@ public class Result<T> extends BaseResult {
         return new Result<>(code, msg, null, null);
     }
 
+    public static Result<Void> fail(String msg, String traceId) {
+        return new Result<>(500, msg, traceId, null);
+    }
+
     public static Result<Void> fail(Integer code, String msg, String traceId) {
         return new Result<>(code, msg, traceId, null);
     }
+
+    public static Result<Void> badReq(String msg, String traceId) {
+        return new Result<>(400, msg, traceId, null);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.klaus.fd.response;
+package com.fd.web.response;
 
 import lombok.*;
 

@@ -1,7 +1,9 @@
 package com.klaus.fd.utils;
 
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +21,8 @@ import java.util.Map;
  */
 @Slf4j
 public class BeanUtil extends BeanUtils implements ApplicationContextAware {
+
+    @Getter
     private static ApplicationContext applicationContext;
 
     public static <T> T getBean(Class<T> targetClass) {
@@ -72,5 +76,16 @@ public class BeanUtil extends BeanUtils implements ApplicationContextAware {
         if (applicationContext == null) {
             throw new IllegalStateException("BeanUtil.applicationContext registration failed");
         }
+    }
+
+    /**
+     * 获取Aop代理对象
+     *
+     * @param invoker 调用程序
+     * @return {@link T}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getAopProxy(T invoker) {
+        return (T) AopContext.currentProxy();
     }
 }

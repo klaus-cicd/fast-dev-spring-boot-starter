@@ -1,4 +1,4 @@
-package com.klaus.fd.dto;
+package com.fd.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
