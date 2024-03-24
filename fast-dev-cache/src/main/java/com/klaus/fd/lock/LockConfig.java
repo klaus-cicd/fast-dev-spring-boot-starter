@@ -80,7 +80,7 @@ public class LockConfig {
             case REDIS:
                 return new RedissonLockExecutor(new RedissonHandlerImpl(lockSettings), cacheEnabled);
             default:
-                throw new LockException(" @EnableLock can't support " + lockSettings.getProvider());
+                throw new LockException("@EnableLock can't support " + lockSettings.getProvider());
         }
     }
 

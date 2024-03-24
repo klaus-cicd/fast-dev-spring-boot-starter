@@ -13,7 +13,7 @@ public class EnableLockSelector extends AdviceModeImportSelector<EnableLock> {
     @Override
     protected String[] selectImports(AdviceMode adviceMode) {
         if (adviceMode != AdviceMode.PROXY) {
-            throw new IllegalStateException("@EnableLockonly support PROXY advice mode.");
+            throw new IllegalStateException("@EnableLock only support PROXY advice mode.");
         }
         return new String[]{LockConfig.class.getName()};
     }

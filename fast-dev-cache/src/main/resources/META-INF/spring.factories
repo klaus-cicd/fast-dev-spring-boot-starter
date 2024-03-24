@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.klaus.fd.config.CacheConfig
+com.klaus.fd.config.CacheAutoConfiguration,\
+com.klaus.fd.util.RedisCache
