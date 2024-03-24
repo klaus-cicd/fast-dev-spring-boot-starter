@@ -36,6 +36,7 @@ public class DateConstant {
     public static final String PATTERN_DATE = "yyyy-MM-dd";
     public static final String UTC_RFC3339_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     public static final String SHANGHAI_RFC3339_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'+08:00'";
+    public static final String DF_ISO8601 = "yyyy-MM-dd'T'HH:mm:ss";
     public static final ZoneId ZONE_ID_UTC = ZoneOffset.UTC;
     public static final String ASIA_SHANGHAI = "Asia/Shanghai";
     public static final ZoneId ZONE_ID_SHANGHAI = ZoneId.of(ASIA_SHANGHAI);

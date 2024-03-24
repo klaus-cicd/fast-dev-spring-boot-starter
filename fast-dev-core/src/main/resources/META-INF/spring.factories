@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.klaus.fd.CoreAutoConfiguration,\
-  com.klaus.fd.utils.BeanUtil
+  com.klaus.fd.utils.JsonUtil
+

@@ -74,6 +74,10 @@ public class DateUtil {
         return localDateTime.format(DateTimeFormatter.ofPattern(DateConstant.UTC_RFC3339_FORMAT).withZone(ZoneOffset.UTC));
     }
 
+    public static String toUtcIso8601(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC));
+    }
+
     public static String toShanghaiRfc3339(LocalDateTime localDateTime) {
         return localDateTime.format(DateConstant.DTF_SHANGHAI);
     }

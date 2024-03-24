@@ -10,8 +10,8 @@ import org.springframework.cache.Cache;
 
 import javax.annotation.Resource;
 
-@Slf4j
 @SpringBootTest
+@Slf4j
 public class CaffeineTest {
 
     @Resource

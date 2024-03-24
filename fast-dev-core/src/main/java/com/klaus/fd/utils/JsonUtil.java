@@ -17,15 +17,16 @@ import java.util.List;
  *
  * @author Klaus
  */
+@Getter
 @Slf4j
 public class JsonUtil {
 
-    @Getter
-    private static final ObjectMapper OBJECT_MAPPER;
+    private final static ObjectMapper OBJECT_MAPPER;
 
     static {
         OBJECT_MAPPER = BeanUtil.getBean(ObjectMapper.class);
     }
+
 
     /**
      * 转换为JSON字符串
