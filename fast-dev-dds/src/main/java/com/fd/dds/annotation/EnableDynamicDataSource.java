@@ -1,6 +1,7 @@
 package com.fd.dds.annotation;
 
-import com.fd.dds.config.DynamicDataSourceConfig;
+import com.fd.dds.DynamicDataSourceManager;
+import com.fd.dds.config.DynamicDataSourceAutoConfiguration;
 import com.fd.dds.properties.MySqlDataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
@@ -16,7 +17,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import({DynamicDataSourceConfig.class})
+@Import({DynamicDataSourceAutoConfiguration.class, DynamicDataSourceManager.class})
 @EnableConfigurationProperties(MySqlDataSourceProperties.class)
 public @interface EnableDynamicDataSource {
 }
