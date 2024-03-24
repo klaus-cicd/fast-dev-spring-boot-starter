@@ -36,6 +36,10 @@ public class Result<T> extends BaseResult {
         this.data = data;
     }
 
+    public static Result<Void> ok() {
+        return new Result<>(HttpStatus.OK.value(), "Success", null);
+    }
+
     public static <T> Result<T> ok(T data) {
         return new Result<>(HttpStatus.OK.value(), "Success", data);
     }
