@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.klaus.fd.json.*;
 import com.klaus.fd.utils.BeanUtil;
+import com.klaus.fd.utils.JsonUtil;
+import com.klaus.fd.utils.MessageUtil;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
@@ -39,5 +42,15 @@ public class CoreAutoConfiguration {
         // objectMapper.findAndRegisterModules();
 
         return objectMapper;
+    }
+
+    @Bean
+    public JsonUtil jsonUtil(ObjectMapper objectMapper) {
+        return new JsonUtil(objectMapper);
+    }
+
+    @Bean
+    public MessageUtil messageUtil(MessageSource messageSource) {
+        return new MessageUtil(messageSource);
     }
 }

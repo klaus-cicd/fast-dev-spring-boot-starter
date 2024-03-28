@@ -8,8 +8,8 @@ import org.springframework.core.NamedInheritableThreadLocal;
 public class ThreadInfoContextHolder {
 
     public static final String TRACE_ID = "_trace-id";
-    public static final String TOKEN = "_trace-id";
-    public static final String USER_INFO = "_trace-id";
+    public static final String TOKEN = "_token";
+    public static final String USER_INFO = "_user";
     private static final ThreadLocal<String> THREAD_CONTEXT_HOLDER = new NamedInheritableThreadLocal<>(TRACE_ID);
     private static final ThreadLocal<String> TOKEN_CONTEXT_HOLDER = new NamedInheritableThreadLocal<>(TOKEN);
     private static final ThreadLocal<String> USER_INFO_CONTEXT_HOLDER = new NamedInheritableThreadLocal<>(USER_INFO);

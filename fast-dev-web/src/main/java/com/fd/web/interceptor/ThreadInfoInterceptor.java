@@ -25,6 +25,8 @@ public class ThreadInfoInterceptor implements HandlerInterceptor {
         }
         ThreadInfoContextHolder.setTraceId(traceId);
         ThreadInfoContextHolder.setToken(ServletUtil.getHeader(request, ThreadInfoContextHolder.TOKEN, StandardCharsets.UTF_8));
+
+
         return true;
     }
 

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.klaus.fd.exception.JsonException;
 import com.klaus.fd.exception.JsonExceptionCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -19,14 +20,12 @@ import java.util.List;
  */
 @Getter
 @Slf4j
+@RequiredArgsConstructor
 public class JsonUtil {
 
-    private final static ObjectMapper OBJECT_MAPPER;
+    private final ObjectMapper objectMapperBean;
 
-    static {
-        OBJECT_MAPPER = BeanUtil.getBean(ObjectMapper.class);
-    }
-
+    private static ObjectMapper objectMapper;
 
     /**
      * 转换为JSON字符串
@@ -39,7 +38,7 @@ public class JsonUtil {
             return null;
         }
         try {
-            return OBJECT_MAPPER.writeValueAsString(object);
+            return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new JsonException(JsonExceptionCode.CONVERT_JSON_STR_ERROR);
         }
@@ -57,7 +56,7 @@ public class JsonUtil {
             return null;
         }
         try {
-            return OBJECT_MAPPER.readValue(jsonStr, targetClass);
+            return objectMapper.readValue(jsonStr, targetClass);
         } catch (JsonProcessingException e) {
             throw new JsonException(JsonExceptionCode.PARSE_ENTITY_ERROR);
         }
@@ -76,9 +75,14 @@ public class JsonUtil {
             return Collections.emptyList();
         }
         try {
-            return OBJECT_MAPPER.readValue(listJsonStr, List.class);
+            return objectMapper.readValue(listJsonStr, List.class);
         } catch (Exception e) {
             throw new JsonException(JsonExceptionCode.PARSE_LIST_ERROR);
         }
     }
+
+    public static void setObjectMapperBean(ObjectMapper objectMapper) {
+        JsonUtil.objectMapper = objectMapper;
+    }
+
 }
