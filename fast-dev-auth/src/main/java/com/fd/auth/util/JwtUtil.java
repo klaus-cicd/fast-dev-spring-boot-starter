@@ -25,14 +25,14 @@ public class JwtUtil {
     public static void main(String[] args) {
         HashMap<String, Object> map = new HashMap<>(2);
         map.put(AuthConstant.USER_ID, "1234567");
-        map.put(AuthConstant.USER_NAME, "klaus");
+        map.put(AuthConstant.USERNAME, "klaus");
         String token = createToken(map);
         log.info("Token: {}", token);
 
 
         Claims claims = parseToken(token);
         log.info(getUserId(claims));
-        log.info(getUserName(claims));
+        log.info(getUsername(claims));
     }
 
     /**
@@ -107,9 +107,9 @@ public class JwtUtil {
      * @param token 令牌
      * @return 用户名
      */
-    public static String getUserName(String token) {
+    public static String getUsername(String token) {
         Claims claims = parseToken(token);
-        return getValue(claims, AuthConstant.USER_NAME);
+        return getValue(claims, AuthConstant.USERNAME);
     }
 
     /**
@@ -118,8 +118,8 @@ public class JwtUtil {
      * @param claims 身份信息
      * @return 用户名
      */
-    public static String getUserName(Claims claims) {
-        return getValue(claims, AuthConstant.USER_NAME);
+    public static String getUsername(Claims claims) {
+        return getValue(claims, AuthConstant.USERNAME);
     }
 
     /**
