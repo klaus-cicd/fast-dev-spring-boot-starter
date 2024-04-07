@@ -3,7 +3,6 @@ package com.klaus.fd.utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +15,6 @@ import java.util.Locale;
  * @date 2024/03/28
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class MessageUtil {
 
