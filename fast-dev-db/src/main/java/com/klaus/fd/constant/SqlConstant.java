@@ -26,4 +26,7 @@ public class SqlConstant {
     public static final String DESC = " DESC ";
     public static final String LIMIT = " LIMIT ";
     public static final String FROM = " FROM ";
+    public static final String AND = " AND ";
+    public static final String OR = " OR ";
+    public static final String LIKE = " LIKE ";
 }

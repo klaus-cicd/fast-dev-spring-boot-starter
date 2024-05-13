@@ -8,14 +8,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.klaus.fd.constant.SqlConstant;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -25,11 +23,15 @@ import java.util.stream.Collectors;
 public class SqlUtil {
 
 
-    public static <T> String getTbNameByAnno(Class<T> entityClass) {
+    private static <T> String getTbNameByAnnoStrict(Class<T> entityClass) {
         String finalTbName;
         Assert.isTrue(AnnotationUtil.hasAnnotation(entityClass, TableName.class), "SqlUtil#getTbNameByAnno fail, no @TableName found in {}!", entityClass.getSimpleName());
         finalTbName = AnnotationUtil.getAnnotationValue(entityClass, TableName.class, "value");
         return finalTbName;
+    }
+
+    public static <T> String getTbNameByAnno(Class<T> entityClass) {
+        return AnnotationUtil.getAnnotationValue(entityClass, TableName.class, "value");
     }
 
     public static Collector<CharSequence, ?, String> getParenthesisCollector() {
@@ -83,10 +85,7 @@ public class SqlUtil {
         List<String> updateColumnList = new ArrayList<>(fields.size());
 
         String columnNameSql = fields.stream()
-                .map(field -> {
-                    String fieldName = field.getName();
-                    return buildColumnSql(idFieldName, paramNameList, updateColumnList, fieldName);
-                })
+                .map(field -> buildColumnSql(field, idFieldName, paramNameList, updateColumnList))
                 .collect(SqlUtil.getParenthesisCollector());
 
         // 拼接参数部分SQL
@@ -121,8 +120,30 @@ public class SqlUtil {
         String columnName = StrUtil.toUnderlineCase(fieldName);
         String paramName = SqlConstant.COLON + fieldName;
         paramNameList.add(paramName);
-        if (!StrUtil.equals(idFieldName, fieldName) || !"createTime".equals(fieldName)) {
+        if (!Arrays.asList("createTime", idFieldName).contains(fieldName)) {
             updateColumnList.add(columnName + SqlConstant.EQUAL + paramName);
+        }
+        return columnName;
+    }
+
+    private static String buildColumnSql(Field field, String idFieldName, List<String> paramNameList, List<String> updateColumnList) {
+        String fieldName = field.getName();
+        String columnName = getColumnName(field, fieldName);
+        String paramName = SqlConstant.COLON + fieldName;
+        paramNameList.add(paramName);
+        if (!Arrays.asList("createTime", idFieldName).contains(fieldName)) {
+            updateColumnList.add(columnName + SqlConstant.EQUAL + paramName);
+        }
+        return columnName;
+    }
+
+    private static @Nullable String getColumnName(Field field, String fieldName) {
+        TableField tableFieldAnno = field.getAnnotation(TableField.class);
+        String columnName;
+        if (tableFieldAnno != null) {
+            columnName = tableFieldAnno.value();
+        } else {
+            columnName = StrUtil.toUnderlineCase(fieldName);
         }
         return columnName;
     }
@@ -202,7 +223,12 @@ public class SqlUtil {
     }
 
     private static <T> String getTbName(Class<T> entityClass, String tbName) {
-        return StringUtils.hasText(tbName) ? tbName : getTbNameByAnno(entityClass);
+        return StringUtils.hasText(tbName) ? tbName : getTbNameByAnnoStrict(entityClass);
+    }
+
+    public static <T> String getTbName(Class<T> entityClass) {
+        String tbNameByAnno = getTbNameByAnno(entityClass);
+        return StringUtils.hasText(tbNameByAnno) ? tbNameByAnno : StrUtil.toUnderlineCase(entityClass.getSimpleName());
     }
 
     /**

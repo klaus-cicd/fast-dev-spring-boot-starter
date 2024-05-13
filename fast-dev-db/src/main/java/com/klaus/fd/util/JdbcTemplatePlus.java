@@ -5,6 +5,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.klaus.fd.utils.ClassUtil;
 import com.klaus.fd.utils.DateUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,29 +22,11 @@ import java.util.*;
  * @author Klaus
  */
 @Slf4j
-public class JdbcTemplateUtil {
+@RequiredArgsConstructor
+public class JdbcTemplatePlus {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final JdbcTemplate jdbcTemplate;
-
-    public JdbcTemplateUtil(NamedParameterJdbcTemplate namedParameterJdbcTemplate, JdbcTemplate jdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-
-    private static Map<String, Object> getStandMap(List<Map<String, Object>> mapList) {
-        if (CollectionUtils.isEmpty(mapList)) {
-            return null;
-        }
-        // 获取Key最全的map
-        Map<String, Object> standMap = mapList.stream().max(Comparator.comparingInt(map -> map.keySet().size())).get();
-        // 将值都初始化为null
-        Map<String, Object> stringObjectMap = new HashMap<>(standMap);
-        stringObjectMap.entrySet().forEach(entry -> entry.setValue(null));
-        return stringObjectMap;
-    }
-
 
     /**
      * 批量保存列表数据
@@ -88,6 +71,12 @@ public class JdbcTemplateUtil {
         doBatchUpdate(entityList, initSql.toString(), 300);
     }
 
+    /**
+     * 批量保存
+     *
+     * @param tbName  结核病名字
+     * @param mapList 地图列表
+     */
     @Transactional(rollbackFor = Exception.class)
     public <T> void saveBatch(String tbName, List<Map<String, Object>> mapList) {
         Map<String, Object> standMap = getStandMap(mapList);
@@ -101,6 +90,14 @@ public class JdbcTemplateUtil {
         doBatchUpdateByMap(mapList, insertIntoSql.toString(), 500, standMap);
     }
 
+
+    /**
+     * 保存或更新批处理
+     *
+     * @param tbName    结核病名字
+     * @param mapList   地图列表
+     * @param idKeyName Id键名
+     */
     @Transactional(rollbackFor = Exception.class)
     public <T> void saveOrUpdateBatch(String tbName, List<Map<String, Object>> mapList, String idKeyName) {
         Map<String, Object> standMap = getStandMap(mapList);
@@ -117,6 +114,22 @@ public class JdbcTemplateUtil {
 
         // 将列表数据进行分批处理，默认是 500 一批次
         doBatchUpdateByMap(mapList, insertIntoSql.toString(), 500, standMap);
+    }
+
+    /**
+     * 检查db是否存在
+     * (需要先选定一个已存在的数据库)
+     *
+     * @param dbName 数据库名字
+     * @return boolean
+     */
+    public boolean checkDbExist(String dbName) {
+        List<String> databaseName = jdbcTemplate.query("SHOW DATABASES", (rs, row) -> rs.getString(1));
+        if (CollectionUtils.isEmpty(databaseName)) {
+            return false;
+        }
+
+        return databaseName.contains(dbName);
     }
 
     private <T> void doBatchUpdate(List<T> entityList, String insertIntoSql, int pageSize) {
@@ -168,19 +181,15 @@ public class JdbcTemplateUtil {
     }
 
 
-    /**
-     * 检查db是否存在
-     * (需要先选定一个已存在的数据库)
-     *
-     * @param dbName 数据库名字
-     * @return boolean
-     */
-    public boolean checkDbExist(String dbName) {
-        List<String> databaseName = jdbcTemplate.query("SHOW DATABASES", (rs, row) -> rs.getString(1));
-        if (CollectionUtils.isEmpty(databaseName)) {
-            return false;
+    private static Map<String, Object> getStandMap(List<Map<String, Object>> mapList) {
+        if (CollectionUtils.isEmpty(mapList)) {
+            return null;
         }
-
-        return databaseName.contains(dbName);
+        // 获取Key最全的map
+        Map<String, Object> standMap = mapList.stream().max(Comparator.comparingInt(map -> map.keySet().size())).get();
+        // 将值都初始化为null
+        Map<String, Object> stringObjectMap = new HashMap<>(standMap);
+        stringObjectMap.entrySet().forEach(entry -> entry.setValue(null));
+        return stringObjectMap;
     }
 }
