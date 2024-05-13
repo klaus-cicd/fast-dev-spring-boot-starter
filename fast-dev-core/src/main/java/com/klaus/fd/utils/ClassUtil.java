@@ -42,4 +42,19 @@ public class ClassUtil {
     public static List<Field> getAllFields(Class<?> clazz, Predicate<Field> filter) {
         return getAllFields(clazz).stream().filter(filter).collect(Collectors.toList());
     }
+
+    /**
+     * 获取字段(向上查询)
+     *
+     * @param clazz clazz
+     * @param name  名字
+     * @return {@link Field }
+     */
+    public static Field getField(Class<?> clazz, String name) {
+        Field field = cn.hutool.core.util.ClassUtil.getDeclaredField(clazz, name);
+        if (field == null && !clazz.getSuperclass().equals(Object.class)) {
+            field = getField(clazz.getSuperclass(), name);
+        }
+        return field;
+    }
 }
