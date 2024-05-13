@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +27,11 @@ public class JsonUtil {
     private final ObjectMapper objectMapperBean;
 
     private static ObjectMapper objectMapper;
+
+    @PostConstruct
+    void init() {
+        setObjectMapperBean(objectMapperBean);
+    }
 
     /**
      * 转换为JSON字符串
