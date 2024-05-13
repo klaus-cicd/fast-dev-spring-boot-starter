@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Klaus
  */
 
-public class RedisCache {
+public class RedisUtil {
 
     private static final StringRedisTemplate STRING_REDIS_TEMPLATE = BeanUtil.getBean(StringRedisTemplate.class);
     private static final RedisTemplate<String, Object> REDIS_TEMPLATE = BeanUtil.getBean(RedisTemplate.class);
@@ -105,9 +105,15 @@ public class RedisCache {
         return null;
     }
 
+
+    public static Boolean exists(String key) {
+        checkBean();
+        return STRING_REDIS_TEMPLATE.hasKey(key);
+    }
+
     public static void checkBean() {
         if (STRING_REDIS_TEMPLATE == null || REDIS_TEMPLATE == null) {
-            throw new RuntimeException();
+            throw new RuntimeException("RedisCache#checkBean fail");
         }
     }
 
