@@ -7,6 +7,7 @@ import com.klaus.fd.utils.ClassUtil;
 import com.klaus.fd.utils.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,20 @@ public class JdbcTemplatePlus {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final JdbcTemplate jdbcTemplate;
+
+
+    public <T> List<T> list(String sql, Map<String, Object> params, Class<T> clazz) {
+        return namedParameterJdbcTemplate.query(sql, params, BeanPropertyRowMapper.newInstance(clazz));
+    }
+
+
+    public <T> T get(String sql, Map<String, Object> params, Class<T> clazz) {
+        List<T> list = list(sql, params, clazz);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
 
     /**
      * 批量保存列表数据
