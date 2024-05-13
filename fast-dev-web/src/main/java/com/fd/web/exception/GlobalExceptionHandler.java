@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     public Result<Void> bindExceptionHandler(BindException e) {
         String msg = buildBindExceptionMsg(e.getBindingResult());
-        log.error("BindException msg:{}", msg, e);
+        log.error("[BindException] uri:{}, msg:{}", ThreadInfoContextHolder.getUri(), msg, e);
         return Result.badReq(msg, ThreadInfoContextHolder.getTraceId());
     }
 
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     public Result<Void> methodArgumentTypeMismatchExceptionHandleTypeMismatch(MethodArgumentTypeMismatchException e) {
         String message = StrUtil.format("{} should be a valid {} and {} isn't",
                 e.getName(), Objects.requireNonNull(e.getRequiredType()).getSimpleName(), e.getValue(), e);
-        log.error("MethodArgumentTypeMismatchException  msg:{}", message, e);
+        log.error("[MethodArgumentTypeMismatchException] uri:{}, msg:{}", ThreadInfoContextHolder.getUri(), message, e);
         return Result.badReq(message, ThreadInfoContextHolder.getTraceId());
     }
 
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public Result<Void> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         String msg = buildBindExceptionMsg(e.getBindingResult());
-        log.error("MethodArgumentNotValidException  msg:{}", msg, e);
+        log.error("[MethodArgumentNotValidException] uri:{} msg:{}", ThreadInfoContextHolder.getUri(), msg, e);
         return Result.badReq(msg, ThreadInfoContextHolder.getTraceId());
     }
 
@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
                     return StrUtil.format("参数{}{}", fieldName, constraintViolation.getMessage());
                 })
                 .collect(Collectors.joining("; "));
-        log.error("ConstraintViolationException  msg:{}", msg, e);
+        log.error("[ConstraintViolationException] uri:{}, msg:{}", ThreadInfoContextHolder.getUri(), msg, e);
         return Result.badReq(StrUtil.format("Parameter validate exception：{}", msg), ThreadInfoContextHolder.getTraceId());
     }
 
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     public Result<Void> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e) {
         String msg = StrUtil.format("Param is missing: {}", e.getParameterName());
-        log.error("MissingServletRequestParameterException  msg:{}", msg, e);
+        log.error("[MissingServletRequestParameterException] uri:{}, msg:{}", ThreadInfoContextHolder.getUri(), msg, e);
         return Result.fail(msg, ThreadInfoContextHolder.getTraceId());
     }
 
@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(AbstractException.class)
     public Result<Void> abstractException(AbstractException exception) {
-        log.error("AbstractException  msg:{}", exception.getMessage(), exception);
+        log.error("[AbstractException] uri:{}, msg:{}", ThreadInfoContextHolder.getUri(), exception.getMessage(), exception);
         return Result.fail(exception.getCode(), exception.getMessage(), ThreadInfoContextHolder.getTraceId());
     }
 
@@ -119,7 +119,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(value = Exception.class)
     public Result<Void> handler(Exception e) {
-        log.error("GlobalExceptionHandler#System error", e);
+        log.error("[Exception] uri:{}", ThreadInfoContextHolder.getUri(), e);
         return Result.fail(BizExceptionCode.SYSTEM_ERROR.getCode(), BizExceptionCode.SYSTEM_ERROR.getMsg(), ThreadInfoContextHolder.getTraceId());
     }
 
