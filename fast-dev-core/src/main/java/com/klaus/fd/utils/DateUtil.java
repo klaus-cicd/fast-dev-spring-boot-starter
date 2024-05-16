@@ -37,6 +37,10 @@ public class DateUtil {
         return timestamp.getTime();
     }
 
+    public static long toLong(LocalDateTime localDateTime) {
+        return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+    }
+
     public static LocalDate parseToLocalDate(long millTs) {
         return Instant.ofEpochMilli(millTs).atZone(DEFAULT_ZONE_ID).toLocalDate();
     }
@@ -68,6 +72,10 @@ public class DateUtil {
 
     public static Timestamp parseToTimestamp(long longValue) {
         return new Timestamp(longValue);
+    }
+
+    public static Timestamp parseToTimestamp(LocalDateTime localDateTime) {
+        return new Timestamp(toLong(localDateTime));
     }
 
     public static String toUtcRfc3339(LocalDateTime localDateTime) {

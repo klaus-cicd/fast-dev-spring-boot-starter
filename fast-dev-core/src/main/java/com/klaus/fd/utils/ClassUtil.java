@@ -1,5 +1,8 @@
 package com.klaus.fd.utils;
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,5 +59,17 @@ public class ClassUtil {
             field = getField(clazz.getSuperclass(), name);
         }
         return field;
+    }
+
+
+    /**
+     * 获取类名的下划线名称
+     *
+     * @param clazz clazz
+     * @return {@link String }
+     */
+    public static String getClassUnderLineName(Class<?> clazz) {
+        Assert.notNull(clazz, "ClassUtil#getClassUnderLineName: Class must not be null");
+        return StrUtil.toUnderlineCase(clazz.getSimpleName());
     }
 }
