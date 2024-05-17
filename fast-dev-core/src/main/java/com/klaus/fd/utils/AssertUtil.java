@@ -2,6 +2,7 @@ package com.klaus.fd.utils;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.StrUtil;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
@@ -42,4 +43,11 @@ public class AssertUtil {
             throw exception;
         }
     }
+
+    public static void notBlank(String text, RuntimeException exception) {
+        if (StrUtil.isBlank(text)) {
+            throw exception;
+        }
+    }
+
 }

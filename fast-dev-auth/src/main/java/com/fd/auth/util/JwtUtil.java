@@ -22,13 +22,14 @@ import java.util.Map;
 @Slf4j
 public class JwtUtil {
 
+    public static String SECRET_KEY = AuthConstant.SECRET_KEY;
+
     public static void main(String[] args) {
         HashMap<String, Object> map = new HashMap<>(2);
         map.put(AuthConstant.USER_ID, "1234567");
         map.put(AuthConstant.USERNAME, "klaus");
         String token = createToken(map);
         log.info("Token: {}", token);
-
 
         Claims claims = parseToken(token);
         log.info(getUserId(claims));
@@ -46,7 +47,7 @@ public class JwtUtil {
     }
 
     private static SecretKey getKey() {
-        return Keys.hmacShaKeyFor(AuthConstant.SECRET.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -65,7 +66,7 @@ public class JwtUtil {
      * @param token 令牌
      * @return 用户ID
      */
-    public static String getUserKey(String token) {
+    public static String getUserStr(String token) {
         Claims claims = parseToken(token);
         return getValue(claims, AuthConstant.USER);
     }
@@ -76,7 +77,7 @@ public class JwtUtil {
      * @param claims 身份信息
      * @return 用户ID
      */
-    public static String getUserKey(Claims claims) {
+    public static String getUserStr(Claims claims) {
         return getValue(claims, AuthConstant.USER);
     }
 
