@@ -3,17 +3,21 @@ package com.klaus.fd.util;
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.Pair;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.klaus.fd.constant.SqlConstant;
+import com.klaus.fd.utils.ClassUtil;
+import com.klaus.fd.utils.LambdaUtil;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -22,16 +26,15 @@ import java.util.stream.Collectors;
  */
 public class SqlUtil {
 
-
-    private static <T> String getTbNameByAnnoStrict(Class<T> entityClass) {
-        String finalTbName;
-        Assert.isTrue(AnnotationUtil.hasAnnotation(entityClass, TableName.class), "SqlUtil#getTbNameByAnno fail, no @TableName found in {}!", entityClass.getSimpleName());
-        finalTbName = AnnotationUtil.getAnnotationValue(entityClass, TableName.class, "value");
-        return finalTbName;
+    public static String getTbName(Class<?> entityClass) {
+        String tbNameByAnno = getTbNameByAnno(entityClass);
+        return StringUtils.hasText(tbNameByAnno) ?
+                tbNameByAnno : StrUtil.toUnderlineCase(entityClass.getSimpleName());
     }
 
-    public static <T> String getTbNameByAnno(Class<T> entityClass) {
-        return AnnotationUtil.getAnnotationValue(entityClass, TableName.class, "value");
+    public static String getTbNameByAnno(Class<?> entityClass) {
+        TableName annotation = entityClass.getAnnotation(TableName.class);
+        return annotation == null ? StrUtil.EMPTY : annotation.value();
     }
 
     public static Collector<CharSequence, ?, String> getParenthesisCollector() {
@@ -62,7 +65,7 @@ public class SqlUtil {
                 fields.stream()
                         .map(field -> {
                             paramNameList.add(":" + field.getName());
-                            return getFieldName(field);
+                            return getColumnName(field);
                         })
                         .collect(SqlUtil.getParenthesisCollector()),
                 SqlUtil.separateByCommas(paramNameList, true)
@@ -187,7 +190,7 @@ public class SqlUtil {
 
         // 拼接INSERT INTO语句的初始化 SQL
         return new StringBuilder(SqlConstant.INSERT_INTO)
-                .append(getTbName(entityClass, defaultTbName))
+                .append(StrUtil.isBlankIfStr(defaultTbName) ? getTbName(entityClass) : defaultTbName)
                 .append(columnNameSqlAndParamNameSqlPair.getKey())
                 .append(SqlConstant.VALUES)
                 .append(columnNameSqlAndParamNameSqlPair.getValue());
@@ -222,25 +225,107 @@ public class SqlUtil {
                 .append(columnNameSqlAndParamNameSqlPair.getValue());
     }
 
-    private static <T> String getTbName(Class<T> entityClass, String tbName) {
-        return StringUtils.hasText(tbName) ? tbName : getTbNameByAnnoStrict(entityClass);
-    }
-
-    public static <T> String getTbName(Class<T> entityClass) {
-        String tbNameByAnno = getTbNameByAnno(entityClass);
-        return StringUtils.hasText(tbNameByAnno) ? tbNameByAnno : StrUtil.toUnderlineCase(entityClass.getSimpleName());
-    }
 
     /**
-     * 获取Java字段对应的MySQl字段名称
-     * 优先取@TableField注解的value属性,
+     * 获取Java字段对应的数据库的字段名称
+     * 优先取@TableField注解的value属性, 没有则取Snake形式的字段名称
      *
      * @param field Field
      * @return String
      */
-    public static String getFieldName(Field field) {
-        return AnnotationUtil.hasAnnotation(field, TableField.class) && StrUtil.isNotBlank(AnnotationUtil.getAnnotationValue(field, TableField.class, "value"))
-                ? AnnotationUtil.getAnnotationValue(field, TableField.class, "value")
-                : StrUtil.toUnderlineCase(field.getName());
+    public static String getColumnName(Field field) {
+        TableField tableField = field.getAnnotation(TableField.class);
+        return tableField == null ? StrUtil.toUnderlineCase(field.getName()) : tableField.value();
+    }
+
+    /**
+     * 获取Field对应的数据库字段名, 用逗号","拼接
+     *
+     * @param fields 字段
+     * @return {@link String }
+     */
+    public static String joinColumnNames(List<Field> fields) {
+        if (CollectionUtils.isEmpty(fields)) {
+            return StrUtil.EMPTY;
+        }
+
+        return fields.stream().map(SqlUtil::getColumnName).collect(getColumnWithoutBracketCollector());
+    }
+
+
+    /**
+     * 获取Field对应的数据库字段名, 用逗号","拼接, 并使用括号进行包裹
+     *
+     * @param fields 字段
+     * @return {@link String }
+     */
+    public static String joinColumnNamesWithBracket(List<Field> fields) {
+        if (CollectionUtils.isEmpty(fields)) {
+            return StrUtil.EMPTY;
+        }
+
+        return fields.stream().map(SqlUtil::getColumnName).collect(getColumnWithBracketCollector());
+    }
+
+    public static Collector<CharSequence, ?, String> getColumnWithBracketCollector() {
+        return Collectors.joining(SqlConstant.COMMA, SqlConstant.LEFT_BRACKET, SqlConstant.RIGHT_BRACKET);
+    }
+
+    public static Collector<CharSequence, ?, String> getColumnWithoutBracketCollector() {
+        return Collectors.joining(SqlConstant.COMMA);
+    }
+
+    public Pair<String, List<Field>> getTbNameAndFieldListPair(Class<?> clazz) {
+        // 获取所有字段
+        List<Field> fieldList = ClassUtil.getAllFields(clazz);
+        Assert.notEmpty(fieldList, "[SqlUtil#getTbNameAndFieldListPair] No field found!");
+
+        // 获取表名称, 优先获取@TableName注解的内容
+        String sTbName = getTbNameByAnno(clazz);
+        sTbName = StrUtil.isBlankIfStr(sTbName) ? ClassUtil.getClassUnderLineName(clazz) : sTbName;
+
+        return Pair.of(sTbName, fieldList);
+    }
+
+    /**
+     * 获取字段名称以及对应的值的Map, 组成映射关系
+     *
+     * @param fields 字段
+     * @param o      o
+     * @return {@link Map }<{@link String }, {@link Object }>
+     */
+    public static Map<String, Object> getFiledValueMap(List<Field> fields, Object o) {
+        Map<String, Object> tagValueMap = new HashMap<>(fields.size());
+        for (Field field : fields) {
+            tagValueMap.put(field.getName(), ReflectUtil.getFieldValue(o, field));
+        }
+        return tagValueMap;
+    }
+
+    public static String joinColumnNamesAndValuesSql(Object object, List<Field> fields, Map<String, Object> paramsMap) {
+        if (CollectionUtils.isEmpty(fields)) {
+            return StrUtil.EMPTY;
+        }
+
+        List<String> fieldValueParamNames = new ArrayList<>();
+        String fieldNameStr = fields.stream().map(field -> {
+            String fieldName = field.getName();
+            fieldValueParamNames.add(field.getName());
+            paramsMap.put(fieldName, ReflectUtil.getFieldValue(object, field));
+            return StrUtil.toUnderlineCase(fieldName);
+        }).collect(SqlUtil.getColumnWithBracketCollector());
+
+        String fieldValueParamsStr = fieldValueParamNames.stream()
+                .map(item -> SqlConstant.COLON + item)
+                .collect(SqlUtil.getColumnWithBracketCollector());
+
+        return fieldNameStr + SqlConstant.VALUES + fieldValueParamsStr;
+    }
+
+    public static <T> String getColumnName(Class<T> tClass, Function<T, ?> getterFunc) {
+        String fieldName = LambdaUtil.getFiledNameByGetter(getterFunc);
+        Field field = ClassUtil.getField(tClass, fieldName);
+        String tableFiledAnnoValue = AnnotationUtil.getAnnotationValue(field, TableField.class, "value");
+        return StrUtil.isNotBlank(tableFiledAnnoValue) ? tableFiledAnnoValue : StrUtil.toUnderlineCase(fieldName);
     }
 }
