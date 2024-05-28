@@ -2,10 +2,12 @@ package com.klaus.fd.utils;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -71,5 +73,19 @@ public class ClassUtil {
     public static String getClassUnderLineName(Class<?> clazz) {
         Assert.notNull(clazz, "ClassUtil#getClassUnderLineName: Class must not be null");
         return StrUtil.toUnderlineCase(clazz.getSimpleName());
+    }
+
+    /**
+     * 获取所有字段名
+     *
+     * @param clazz clazz
+     * @return {@link List }<{@link String }>
+     */
+    public static List<String> getAllFieldNames(Class<?> clazz) {
+        List<Field> allFields = getAllFields(clazz);
+        if (CollectionUtils.isEmpty(allFields)) {
+            return Collections.emptyList();
+        }
+        return allFields.stream().map(Field::getName).collect(Collectors.toList());
     }
 }
