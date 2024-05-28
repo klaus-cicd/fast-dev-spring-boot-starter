@@ -323,7 +323,7 @@ public class SqlUtil {
 
     public static <T> String getColumnName(Class<T> tClass, GetterFunction<T, ?> getterFunc) {
         String fieldName = LambdaUtil.getFiledNameByGetter(getterFunc);
-        Field field = ClassUtil.getField(tClass, fieldName);
+        Field field = ClassUtil.getFieldByName(tClass, fieldName);
         String tableFiledAnnoValue = AnnotationUtil.getAnnotationValue(field, TableField.class, "value");
         return StrUtil.isNotBlank(tableFiledAnnoValue) ? tableFiledAnnoValue : StrUtil.toUnderlineCase(fieldName);
     }

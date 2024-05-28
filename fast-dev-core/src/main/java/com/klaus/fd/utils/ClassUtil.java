@@ -53,10 +53,10 @@ public class ClassUtil {
      * @param name  名字
      * @return {@link Field }
      */
-    public static Field getField(Class<?> clazz, String name) {
+    public static Field getFieldByName(Class<?> clazz, String name) {
         Field field = cn.hutool.core.util.ClassUtil.getDeclaredField(clazz, name);
         if (field == null && !clazz.getSuperclass().equals(Object.class)) {
-            field = getField(clazz.getSuperclass(), name);
+            field = getFieldByName(clazz.getSuperclass(), name);
         }
         return field;
     }
