@@ -24,6 +24,9 @@ public class DateUtil {
         return LocalDateTime.now(zone);
     }
 
+    public static Timestamp nowTimestamp() {
+        return Timestamp.valueOf(LocalDateTime.now(DEFAULT_ZONE_ID));
+    }
 
     public static long nowTs() {
         return now().toInstant(DEFAULT_ZONE_OFFSET).toEpochMilli();

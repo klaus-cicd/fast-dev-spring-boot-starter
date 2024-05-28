@@ -9,15 +9,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.klaus.fd.constant.SqlConstant;
+import com.klaus.fd.func.GetterFunction;
 import com.klaus.fd.utils.ClassUtil;
 import com.klaus.fd.utils.LambdaUtil;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -140,7 +139,7 @@ public class SqlUtil {
         return columnName;
     }
 
-    private static @Nullable String getColumnName(Field field, String fieldName) {
+    private static String getColumnName(Field field, String fieldName) {
         TableField tableFieldAnno = field.getAnnotation(TableField.class);
         String columnName;
         if (tableFieldAnno != null) {
@@ -322,7 +321,7 @@ public class SqlUtil {
         return fieldNameStr + SqlConstant.VALUES + fieldValueParamsStr;
     }
 
-    public static <T> String getColumnName(Class<T> tClass, Function<T, ?> getterFunc) {
+    public static <T> String getColumnName(Class<T> tClass, GetterFunction<T, ?> getterFunc) {
         String fieldName = LambdaUtil.getFiledNameByGetter(getterFunc);
         Field field = ClassUtil.getField(tClass, fieldName);
         String tableFiledAnnoValue = AnnotationUtil.getAnnotationValue(field, TableField.class, "value");

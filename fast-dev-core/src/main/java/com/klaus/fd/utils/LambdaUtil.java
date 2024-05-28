@@ -1,12 +1,11 @@
 package com.klaus.fd.utils;
 
-import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.klaus.fd.func.GetterFunction;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
-import java.util.function.Function;
 
 /**
  * @author Klaus
@@ -14,9 +13,9 @@ import java.util.function.Function;
 @Slf4j
 public class LambdaUtil {
 
-    public static <T> String getFiledNameByGetter(Function<T, ?> getterFunc) {
+    public static <T> String getFiledNameByGetter(GetterFunction<T, ?> getterFunc) {
         try {
-            Method method = ReflectUtil.getMethodByName(getterFunc.getClass(), "writeReplace");
+            Method method = getterFunc.getClass().getDeclaredMethod("writeReplace");
             method.setAccessible(true);
             SerializedLambda serializedLambda = (SerializedLambda) method.invoke(getterFunc);
             String methodName = serializedLambda.getImplMethodName();
