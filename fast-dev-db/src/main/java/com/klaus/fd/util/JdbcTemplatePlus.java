@@ -147,6 +147,13 @@ public class JdbcTemplatePlus {
         return databaseName.contains(dbName);
     }
 
+    public boolean checkTableExist(String tableName) {
+        String sql = "SELECT COUNT(1) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = ?";
+
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, tableName);
+        return count != null && count > 0;
+    }
+
     private <T> void doBatchUpdate(List<T> entityList, String insertIntoSql, int pageSize) {
         List<List<T>> partition = ListUtil.partition(entityList, pageSize);
         LocalDateTime now = DateUtil.now();
