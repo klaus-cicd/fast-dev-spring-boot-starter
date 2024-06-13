@@ -21,7 +21,6 @@
         <dependency>
             <groupId>com.klaus.fd</groupId>
             <artifactId>fast-dev-core</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

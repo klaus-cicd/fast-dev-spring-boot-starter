@@ -61,7 +61,6 @@
                 <groupId>com.klaus.fd</groupId>
                 <artifactId>fast-dev-core</artifactId>
                 <version>${fd.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.klaus.fd</groupId>
